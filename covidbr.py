@@ -82,14 +82,25 @@ class CovidBr:
 
         return tabela.iloc[init:]
 
-    def grafico(self, info, **kwargs):
-        pass
+    def grafico_tempo(self, info1,
+                      info2='casosNovos', local=None, marco=0, **kwargs):
+        if local is None:
+            local = self.local_atual
+        try:
+            dados = self.selecao_zero(info2, local, marco)
+            rotulo = local + '\n' + info1
+            ax = dados.plot(kind='line', x='data', y=info1,
+                            label=rotulo, **kwargs)
+            ax.xaxis.set_ticklabels(dados['data'], rotation=45)
+            plt.show()
+        except KeyError:
+            pass
 
 
 def main():
     estudo = CovidBr('dados20200501')
 
-    estudo.selecao_zero(marco=4000000)
+    estudo.grafico_tempo('casosNovos')
 
 
 if __name__ == '__main__':
